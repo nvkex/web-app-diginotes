@@ -1,136 +1,83 @@
-const cells = document.querySelectorAll('.cell');
-const board = document.querySelector('.board');
-const about = document.querySelector('.about');
-const message = document.querySelector('.message');
-const winnerText = document.querySelector('.winner-text');
-const title = document.querySelector('#titleBtn');
-const restart = document.querySelector('#restartBtn');
-const cross = document.querySelector('#aboutCross');
-var xTurn = true;
-var totalMoves = 0;
-var winner = '';
-const WINNING_COMBINATIONS = [
-    [0, 1, 2],
-    [3, 4, 5],
-    [6, 7, 8],
-    [0, 3, 6],
-    [1, 4, 7],
-    [2, 5, 8],
-    [0, 4, 8],
-    [2, 4, 6]
-];
+//Rest of the code
+const newNoteBtn = document.querySelector('.new-note');
+const newNoteDlg = document.querySelector('.note-dialog');
+const cancelNewNoteBtn = document.querySelector('#cancelNote');
+const hideNoteBtn = document.querySelector('#hideNote');
+const noteDisplay = document.querySelector('.note-display');
+const noteDisplayBox = document.querySelector('.note-display-box');
+const noteList = document.querySelector('.note-list');
 
-//About section displayed when clicked on title
-title.addEventListener('click', () => {
-    about.classList.remove('d-none');
-});
+// web app's Firebase configuration
+var firebaseConfig = {
+    apiKey: "AIzaSyAQhVkwaGQhXh42YsLTO0hUgIOPK5L7RSk",
+    authDomain: "diginotes-26ff9.firebaseapp.com",
+    databaseURL: "https://diginotes-26ff9.firebaseio.com",
+    projectId: "diginotes-26ff9",
+    storageBucket: "diginotes-26ff9.appspot.com",
+    messagingSenderId: "674084131396",
+    appId: "1:674084131396:web:4ebcb7dc47be6e8bb62211",
+    measurementId: "G-3SHT2BSX58"
+};
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+firebase.analytics();
+const db = firebase.firestore();
 
-startGame();
+const layNotes = (note) => {
+    let template = `
+        <div class="col-sm-3 my-2">
+            <div class="note bg-info text-light text-left">
+                <h5 class="note-heading">${note.title}</h5>
+                <hr class="bg-light">
+                <p class="note-content">${note.content}</p>
+            </div>
+        </div>
+    `;
+    noteList.innerHTML += template;
+}
 
-//restart game and hide result card
-restart.addEventListener('click',() => {
-    message.classList.add('d-none');
-    startGame()
-});
-
-//Initializing game with everything set to default
-function startGame(){
-    xTurn = true;
-    totalMoves = 0;
-    cells.forEach( cell => {
-        cell.innerHTML = '';
-        cell.classList.remove('filled');
+db.collection('notes').get().then((snapshot) => {
+    snapshot.docs.forEach((doc) => {
+        layNotes(doc.data());
     });
-}
+}).catch((err) => {
+    console.log(err);
+});
 
-//Drawing X and O on the board
-board.addEventListener('click', e => {
-    const currentCell = e.target;
-    const isCell = currentCell.classList.contains('cell');
-    const isFilled = currentCell.classList.contains('filled');
-    if(!isFilled && isCell){
-        if(xTurn){
-            currentCell.innerHTML = "x";
+$(document).ready(function () {
+    $(newNoteDlg).hide();
+    $(noteDisplay).hide();
+    $(document.body).on('click', '.fa-plus', (e) => {
+        $(newNoteDlg).fadeIn("slow");
+    });
+
+    $(cancelNewNoteBtn).on('click', () => {
+        $(newNoteDlg).fadeOut("slow");
+    });
+
+    $(hideNoteBtn).on('click', () => {
+        $(noteDisplay).fadeOut("slow");
+    });
+
+    $(document.body).on('click', '.note, .note-heading, .note-content', (e) => {
+        let head = '';
+        let content = '';
+        if (e.target.classList.contains('note-heading') || e.target.classList.contains('note-content')) {
+            head = e.target.parentElement.children[0].innerHTML;
+            content = e.target.parentElement.children[2].innerHTML;
         }
         else{
-            currentCell.innerHTML = "o";
+            head = e.target.children[0].innerHTML;
+            content = e.target.children[2].innerHTML;
         }
-        xTurn =!xTurn;
-        totalMoves++;
-        currentCell.classList.remove('cell-hover');
-        if(totalMoves >= 3){
-            checkWinner();
-        }
-    }
-    e.target.classList.add('filled');
+        noteDisplayBox.children[0].innerHTML = head;
+        noteDisplayBox.children[2].innerHTML = content;
+        $(noteDisplay).fadeIn("slow");
+    });
 });
 
-/**
- * Hovering effect of X and O on the board
- */
-board.addEventListener('mouseover', e => {
-    const currentCell = e.target;
-    const isCell = currentCell.classList.contains('cell');
-    const isFilled = currentCell.classList.contains('filled');
-    if(isCell && !isFilled){
-        currentCell.classList.add('cell-hover');
-        if(xTurn){
-            currentCell.innerHTML = "x";
-        }
-        else{
-            currentCell.innerHTML = "o";
-        }
-        
-    }
-});
 
-board.addEventListener('mouseout', e => {
-    const currentCell = e.target;
-    const isFilled = currentCell.classList.contains('filled');
-    const cellHover = currentCell.classList.contains('cell-hover');
-    if(cellHover){
-        if(isFilled){
-            currentCell.classList.remove('cell-hover');
-        }
-        else{
-            currentCell.innerHTML = "";
-            currentCell.classList.remove('cell-hover');
-        }
-    }
-});
+// newNoteBtn.addEventListener('click', () => {
+//     newNoteDlg.classList.remove('d-none');
+// });
 
-//Check for winner by matching with WINNER_COMBINATIONS
-const checkWinner = () => {
-    for(var i=0; i<8; i++){
-        var cell1 = cells[WINNING_COMBINATIONS[i][0]].innerHTML;
-        var cell2 = cells[WINNING_COMBINATIONS[i][1]].innerHTML;
-        var cell3 = cells[WINNING_COMBINATIONS[i][2]].innerHTML;
-        if(cell1 == cell2 && cell1 == cell3){
-            winner = cell1;
-        }
-    }
-
-    if(winner.length != 0){
-        gameStatus(1);
-    }
-
-    if(totalMoves === 9){
-        gameStatus(2);
-    }
-}
-
-//Display according to game status
-const gameStatus = (status) => {
-    if(status === 1){
-        winnerText.innerHTML = `Winner is <span class = "text-danger">${winner}</span>!`
-    }
-    else if(status === 2){
-        winnerText.innerHTML = `It's a <span class = "text-danger">Draw</span>!`
-    }
-    message.classList.remove('d-none');
-}
-
-//Cross button function for hiding about card
-cross.addEventListener('click', () => {
-    about.classList.add('d-none');
-});

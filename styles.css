@@ -1,145 +1,99 @@
 body{
-    background-color: #114555;
-    font-family: 'Comic Neue', cursive;
-}
-ul{
-    display:inline;
+    font-family: 'PT Sans', sans-serif;
 }
 
-#titleBtn{
-    font-size: 22px;
+.new-note{
+    height:250px;
+    min-width: 250px;
+    max-height: 250px;
+    max-width: 250px;
+    border-radius: 4px;
+    box-shadow: 0 0 4px 0px rgb(136, 136, 136);
+    padding:75px;
+    font-size: 72px;
 }
 
-.board{
-    box-shadow: 0px 0px 10px 0px rgba(8,35,43,1);
-    color: #114555;
-    font-size: 120px;
-    border-radius: 20px;
-    width:600px;
-    height:600px;
-    padding:0;
-    display:grid;
-    grid-template-columns: repeat(3, auto);
+.note{
+    cursor:pointer;
+    min-width: 250px;
+    height:250px;
+    max-height: 250px;
+    max-width: 250px;
+    border-radius: 4px;
+    box-shadow: 0 0 4px 0px rgb(136, 136, 136);
+    padding:10px;
 }
 
-.board .cell{
-    display:inline;
-}
-
-.cell{
-    width:200px;
-    height:200px;
-    text-align: center;
-    border: 8px solid #114555;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
+.icon-container{
+    transition: 0.2s;
     cursor: pointer;
+    padding:14px;
+    background-color: white;
+    border: 1px solid lightgrey;
+    box-shadow: 0 0 4px 0px rgba(136, 136, 136,0.4);
+    border-radius:50%;
 }
 
-.cell:first-child,
-.cell:nth-child(2),
-.cell:nth-child(3) {
-  border-top: none;
+.icon-container:hover{
+    font-size: 80px;
+    padding:10px;
 }
 
-.cell:nth-child(3n + 1) {
-    border-left: none;
+.container-fluid button{
+    font-size: 20px;
 }
 
-.cell:nth-child(3n + 3) {
-    border-right: none;
-}
-
-.cell:last-child,
-.cell:nth-child(8),
-.cell:nth-child(7) {
-  border-bottom: none;
-}
-
-.cell:nth-child(4),
-.cell:nth-child(5),
-.cell:nth-child(6) {
-    border-top:none;
-    border-bottom:none;
-}
-
-.cell:nth-child(2),
-.cell:nth-child(5),
-.cell:nth-child(8) {
-    border-left:none;
-    border-right:none;
-}
-
-.message, .about {
-    transition: 1s;
+.note-dialog{
+    background-color: rgba(0, 0, 0, 0.4);
     position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.9);
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
     justify-content: center;
     align-items: center;
-    color: white;
-    font-size: 5rem;
     flex-direction: column;
-  }
-
-.message button {
-    font-size: 3rem;
-    padding: .25em .5em;
-  }
-
-.message .container{
-    max-width:600px;
-    background-color: #0b2a33;
-    border-radius: 10px;
 }
 
-.about .container{
-    font-family: 'Roboto', sans-serif;
-    padding-bottom:40px;
-    box-shadow: 0 0 6px 2px rgba(83, 83, 83, 0.8);
-    color:white;
-    max-width:600px;
-    background-color: #114555;
-    border-radius: 10px;
+.note-box{
+    padding:10px;
+    height:580px;
+    width:450px;
+    margin:60px auto;
+    border-radius: 4px;
 }
 
-
-.about a{
-    transition: 1s;
-    text-decoration: none;
-    color:white;
-}
-.about a:hover{
-    color:black;
+#noteHead{
+    width:100%;
+    border:none;
 }
 
-
-.winner-text{
-    text-decoration: underline;
+#noteArea{
+    resize: none;
+    width:100%;
+    border:none;
 }
 
-/* temporary classes */
-.filled{
-    cursor: not-allowed;
+.note-display{
+    background-color: rgba(0, 0, 0, 0.4);
+    position: fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 }
 
-.cell-hover{
-    color: #80cde5 !important;
+.note-display-box{
+    padding:10px;
+    height:580px;
+    width:450px;
+    margin:60px auto;
+    border-radius: 4px;
 }
 
-#aboutCross{
-    float:right;
-    color:white;
-    font-size:20pt; 
-    
-    cursor: pointer;
-}
-
-#aboutCross:hover{
-    color: #80cde5;
+.display-content{
+    height: 420px;
 }
