@@ -1,0 +1,63 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel = "stylesheet" href = "styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Comic+Neue&display=swap" rel="stylesheet">
+    <link rel = "stylesheet" href = "https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>Tic Tact Toe</title>
+</head>
+<body>
+    <div class = "container-fluid bg-info text-center py-2">
+        <button class = "btn btn-info mx-auto" id = "titleBtn">TIC TAC TOE</button>
+    </div>
+
+    <div class="container my-5">
+        <div class = "board bg-info mx-auto">
+            
+            <div class = "cell"></div>
+            <div class = "cell"></div>
+            <div class = "cell"></div>
+            
+            <div class = "cell"></div>
+            <div class = "cell"></div>
+            <div class = "cell"></div>
+
+            <div class = "cell"></div>
+            <div class = "cell"></div>
+            <div class = "cell"></div>
+
+        </div>
+    </div>
+
+    <!-- Winner Display Message -->
+    <div class = "message d-none">
+        <div class = "container">
+            <div class = "text-center my-5">
+                <h2 class = "winner-text display-2 text-info"></h2>
+                <button class = "btn btn-outline-info my-5" id = "restartBtn">Restart</button>
+            </div>
+        </div>
+        
+    </div>
+
+    <!-- About Section -->
+    <div class = "about d-none">
+        <div class = "container my-5 text-center">
+            <span id = "aboutCross"> &cross; </span>
+            <p>ABOUT</p>
+            <div>
+                <a href = "https://github.com/nvkex" ><i class="fa fa-github-square" aria-hidden="true"></i></a>
+            </div>
+            <div>
+                <a href = "https://instagram.com/nvkex"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+            </div>
+
+        </div>
+    </div>
+
+    <script src = "app.js"></script>
+</body>
+</html>
