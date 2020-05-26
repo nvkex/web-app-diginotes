@@ -1,6 +1,7 @@
 //Rest of the code
 const newNoteBtn = document.querySelector('.new-note');
 const newNoteDlg = document.querySelector('.note-dialog');
+const addNoteBtn = document.querySelector('#addNoteBtn');
 const cancelNewNoteBtn = document.querySelector('#cancelNote');
 const hideNoteBtn = document.querySelector('#hideNote');
 const noteDisplay = document.querySelector('.note-display');
@@ -23,27 +24,60 @@ firebase.initializeApp(firebaseConfig);
 firebase.analytics();
 const db = firebase.firestore();
 
-const layNotes = (note) => {
-    let template = `
-        <div class="col-sm-3 my-2">
-            <div class="note bg-info text-light text-left">
-                <h5 class="note-heading">${note.title}</h5>
-                <hr class="bg-light">
-                <p class="note-content">${note.content}</p>
+//Getting notes from firebase
+function getNotes(){
+    const layNotes = (note) => {
+        let template = `
+            <div class="col-sm-3 my-2">
+                <div class="note bg-info text-light text-left">
+                    <h5 class="note-heading">${note.title}</h5>
+                    <hr class="bg-light">
+                    <p class="note-content">${note.content}</p>
+                </div>
             </div>
-        </div>
-    `;
-    noteList.innerHTML += template;
+        `;
+        noteList.innerHTML += template;
+    }
+    
+    
+    db.collection('notes').get().then((snapshot) => {
+        snapshot.docs.forEach((doc) => {
+            layNotes(doc.data());
+        });
+    }).catch((err) => {
+        console.log(err);
+    });
 }
 
-db.collection('notes').get().then((snapshot) => {
-    snapshot.docs.forEach((doc) => {
-        layNotes(doc.data());
-    });
-}).catch((err) => {
-    console.log(err);
+getNotes();
+
+
+//uploading notes to firebase
+addNoteBtn.addEventListener('click', () => {
+    const noteTitle = document.querySelector('#noteHead').value;
+    const noteContent = document.querySelector("#noteArea").value;
+    console.log(noteTitle, noteContent);
+    if(noteContent.trim() != ''){
+        let note = {
+            title: noteTitle,
+            content: noteContent,
+            created_at: firebase.firestore.Timestamp.fromDate(new Date())
+        };
+
+        db.collection('notes').add(note).then(() =>{
+            location.reload();
+        })
+        .catch((err) =>{
+            console.log(err);
+        });
+    }
+    else{
+        console.log('Empty Note!');
+    }
+
 });
 
+//JQuery for animations
 $(document).ready(function () {
     $(newNoteDlg).hide();
     $(noteDisplay).hide();
@@ -52,6 +86,10 @@ $(document).ready(function () {
     });
 
     $(cancelNewNoteBtn).on('click', () => {
+        $(newNoteDlg).fadeOut("slow");
+    });
+
+    $(addNoteBtn).on('click', () => {
         $(newNoteDlg).fadeOut("slow");
     });
 
@@ -75,9 +113,4 @@ $(document).ready(function () {
         $(noteDisplay).fadeIn("slow");
     });
 });
-
-
-// newNoteBtn.addEventListener('click', () => {
-//     newNoteDlg.classList.remove('d-none');
-// });
 
